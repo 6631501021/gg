@@ -20,7 +20,7 @@
             </div>
             <span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded">+12%</span>
           </div>
-          <p class="text-xs text-gray-500 font-semibold mt-4 uppercase">Total Detections Today</p>
+          <p class="text-xs text-gray-500 font-semibold mt-4 uppercase">VIOLATION TODAY</p>
           <h3 class="text-4xl font-bold text-gray-900 mt-1">1,000</h3>
         </div>
 
@@ -35,7 +35,7 @@
             </div>
             <span class="text-xs font-bold text-red-600 bg-red-50 px-2 py-1 rounded">+4.2%</span>
           </div>
-          <p class="text-xs text-gray-500 font-semibold mt-4 uppercase">No Helmet</p>
+          <p class="text-xs text-gray-500 font-semibold mt-4 uppercase">VIOLATION LAST HOUR</p>
           <h3 class="text-4xl font-bold text-gray-900 mt-1">500</h3>
         </div>
 
@@ -49,47 +49,54 @@
               </svg>
             </div>
           </div>
-          <p class="text-xs text-gray-500 font-semibold mt-4 uppercase">License Plates Logged</p>
-          <h3 class="text-4xl font-bold text-gray-900 mt-1">500</h3>
+          <p class="text-xs text-gray-500 font-semibold mt-4 uppercase">ACTIVE CAMERAS</p>
+          <h3 class="text-4xl font-bold text-gray-900 mt-1">1</h3>
         </div>
 
-        <div class="bg-red-800 p-6 rounded-xl shadow-md text-white">
-          <div class="flex justify-between items-start">
-            <div class="p-2 bg-red-700/50 rounded-lg">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z">
-                </path>
-              </svg>
-            </div>
-          </div>
-          <p class="text-xs text-red-200 font-semibold mt-4 uppercase">Processing Latency</p>
-          <div class="flex items-end gap-2 mt-1">
-            <h3 class="text-4xl font-bold">42</h3>
-            <span class="text-xl font-medium mb-1">ms</span>
-          </div>
-          <p class="text-xs text-red-300 mt-2">Optimized performance</p>
-        </div>
+        
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-2 bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+        <div class="lg:col-span-2 bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col">
+
           <div class="flex justify-between items-center mb-6">
             <h3 class="text-xl font-bold text-gray-900">Detection Trends</h3>
             <div class="flex border border-gray-200 rounded-md overflow-hidden">
-              <button class="px-3 py-1 text-xs font-medium bg-gray-50 text-gray-700">
+              <button @click="activeTab = '24h'"
+                :class="activeTab === '24h' ? 'bg-gray-100 text-gray-900 font-bold' : 'bg-white text-gray-500 font-medium hover:bg-gray-50'"
+                class="px-3 py-1 text-xs transition-colors duration-200">
                 24 HOURS
               </button>
-              <button class="px-3 py-1 text-xs font-medium bg-white text-gray-500 border-l border-gray-200">
+              <button @click="activeTab = '7d'"
+                :class="activeTab === '7d' ? 'bg-gray-100 text-gray-900 font-bold' : 'bg-white text-gray-500 font-medium hover:bg-gray-50'"
+                class="px-3 py-1 text-xs border-l border-gray-200 transition-colors duration-200">
                 7 DAYS
               </button>
             </div>
           </div>
-          <!-- <div class="h-64 bg-gray-50 rounded border border-dashed border-gray-300 flex items-center justify-center text-gray-400">
-            [ Bar Chart Component Goes Here ]
-          </div> -->
+
           <div class="flex-1 flex items-end gap-2 mt-4 min-h-[300px] border-b-2 border-gray-100 pb-2 relative">
-            <div class="w-full bg-red-200/50 rounded-t-sm" style="height: 30%"></div>
+            <div v-for="(item, index) in currentChartData" :key="index"
+              class="w-full rounded-t-sm relative transition-all duration-500 ease-out flex flex-col justify-end group"
+              :class="item.isPeak ? 'bg-red-900' : 'bg-red-300 hover:bg-red-400'"
+              :style="{ height: item.percent + '%' }">
+              <span v-if="item.isPeak" class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold text-red-900">
+                Peak
+              </span>
+
+              <div
+                class="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-[10px] py-1 px-2 rounded pointer-events-none transition-opacity z-10">
+                {{ item.percent }}%
+              </div>
+            </div>
           </div>
+
+          <div class="flex justify-between text-[10px] font-bold text-gray-400 mt-2 px-1">
+            <span v-for="(item, index) in currentChartData" :key="'label-' + index">
+              {{ item.time }}
+            </span>
+          </div>
+
         </div>
 
         <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
@@ -140,4 +147,38 @@
 <script setup>
 import MainLayout from '../components/MainLayout.vue'
 // นำเข้าข้อมูล API หรือ State Management (Pinia/Vuex) ตรงนี้
+
+import { ref, computed } from 'vue'
+
+// 1. สร้างตัวแปรเก็บสถานะว่าตอนนี้กดแท็บไหนอยู่ (ค่าเริ่มต้นคือ '24h')
+const activeTab = ref('24h')
+
+// 2. ข้อมูลจำลองสำหรับ 24 ชั่วโมง
+const data24h = [
+  { time: '06:00', percent: 30 },
+  { time: '08:00', percent: 45 },
+  { time: '10:00', percent: 60 },
+  { time: '12:00', percent: 90, isPeak: true }, // Peak
+  { time: '14:00', percent: 80 },
+  { time: '16:00', percent: 50 },
+  { time: '18:00', percent: 25 },
+  { time: '20:00', percent: 20 },
+  { time: '22:00', percent: 35 }
+]
+
+// 3. ข้อมูลจำลองสำหรับ 7 วัน
+const data7d = [
+  { time: 'Mon', percent: 40 },
+  { time: 'Tue', percent: 65 },
+  { time: 'Wed', percent: 85, isPeak: true }, // Peak
+  { time: 'Thu', percent: 45 },
+  { time: 'Fri', percent: 70 },
+  { time: 'Sat', percent: 30 },
+  { time: 'Sun', percent: 20 }
+]
+
+// 4. สร้างตัวแปรคำนวณว่าควรดึงข้อมูลชุดไหนมาโชว์
+const currentChartData = computed(() => {
+  return activeTab.value === '24h' ? data24h : data7d
+})
 </script>
