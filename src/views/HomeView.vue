@@ -4,7 +4,7 @@
       
       <div>
         <h1 class="text-3xl font-bold text-gray-900">System Overview</h1>
-        <p class="text-gray-500 mt-1">Real-time surveillance and automated violation logging at Mae Fah Luang main gates.</p>
+        <p class="text-gray-500 mt-1">MFU Main Gate</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
