@@ -6,7 +6,7 @@
         <p class="text-gray-500 mt-1">MFU Main Gate</p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
           <div class="flex justify-between items-start">
             <div class="p-2 bg-red-50 text-red-700 rounded-lg">
