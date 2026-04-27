@@ -175,16 +175,16 @@ const showAll = ref(false)
 
 // 2. ข้อมูลจำลอง 10 รายการ
 const recentAlerts = [
-  { id: 1, title: 'No Helmet Detected', location: 'Post guard gate - IN', plate: '1กก-8822', time: '2m ago', image: 'public/images/nh1.jpg' },
-  { id: 2, title: 'No Helmet Detected', location: 'Post guard gate - OUT', plate: '3กข-1234', time: '8m ago', image: 'public/images/nh2.jpg' },
-  { id: 3, title: 'No Helmet Detected', location: 'Dormitory Gate - IN', plate: 'ขข-999', time: '15m ago', image: 'public/images/nh3.jpg' },
-  { id: 4, title: 'Multiple Riders (No Helmet)', location: 'Main Gate - OUT', plate: '5งง-5555', time: '22m ago', image: 'public/images/nh4.jpg' },
-  { id: 5, title: 'No Helmet Detected', location: 'Dormitory Gate - OUT', plate: '1กค-1111', time: '30m ago', image: 'public/images/nh1.jpg' },
-  { id: 6, title: 'No Helmet Detected', location: 'Medical Center Gate', plate: '2กจ-4433', time: '45m ago', image: 'public/images/nh2.jpg' },
-  { id: 7, title: 'No Helmet Detected', location: 'Post guard gate - IN', plate: '8กฮ-9090', time: '1h ago', image: 'public/images/nh3.jpg' },
-  { id: 8, title: 'No Helmet Detected', location: 'Stadium Rear Access', plate: '1ขข-100', time: '1.5h ago', image: 'public/images/nh4.jpg' },
-  { id: 9, title: 'No Helmet Detected', location: 'Main Gate - IN', plate: 'ไม่ติดแผ่นป้าย', time: '2h ago', image: 'public/images/nh1.jpg' },
-  { id: 10, title: 'No Helmet Detected', location: 'Post guard gate - OUT', plate: '4กต-2345', time: '3h ago', image: 'public/images/nh2.jpg' }
+  { id: 1, title: 'No Helmet Detected', location: 'Post guard gate - IN', plate: '1กก-8822', time: '2m ago', image: '/images/nh1.jpg' },
+  { id: 2, title: 'No Helmet Detected', location: 'Post guard gate - OUT', plate: '3กข-1234', time: '8m ago', image: '/images/nh2.jpg' },
+  { id: 3, title: 'No Helmet Detected', location: 'Dormitory Gate - IN', plate: 'ขข-999', time: '15m ago', image: '/images/nh3.jpg' },
+  { id: 4, title: 'Multiple Riders (No Helmet)', location: 'Main Gate - OUT', plate: '5งง-5555', time: '22m ago', image: '/images/nh4.jpg' },
+  { id: 5, title: 'No Helmet Detected', location: 'Dormitory Gate - OUT', plate: '1กค-1111', time: '30m ago', image: '/images/nh1.jpg' },
+  { id: 6, title: 'No Helmet Detected', location: 'Medical Center Gate', plate: '2กจ-4433', time: '45m ago', image: '/images/nh2.jpg' },
+  { id: 7, title: 'No Helmet Detected', location: 'Post guard gate - IN', plate: '8กฮ-9090', time: '1h ago', image: '/images/nh3.jpg' },
+  { id: 8, title: 'No Helmet Detected', location: 'Stadium Rear Access', plate: '1ขข-100', time: '1.5h ago', image: '/images/nh4.jpg' },
+  { id: 9, title: 'No Helmet Detected', location: 'Main Gate - IN', plate: 'ไม่ติดแผ่นป้าย', time: '2h ago', image: '/images/nh1.jpg' },
+  { id: 10, title: 'No Helmet Detected', location: 'Post guard gate - OUT', plate: '4กต-2345', time: '3h ago', image: '/images/nh2.jpg' }
 ]
 
 // 3. คำนวณว่าจะโชว์กี่อัน ถ้า showAll เป็นจริงโชว์หมด ถ้าเป็นเท็จโชว์แค่ 3 อันแรก (.slice(0, 3))
