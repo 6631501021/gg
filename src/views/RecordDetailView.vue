@@ -4,11 +4,12 @@
       
       <div class="flex justify-between items-center">
         <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex gap-2">
-          <span>Records</span> <span class="text-gray-300">/</span> <span class="text-red-800">View Details</span>
+          <router-link to="/records" class="hover:text-red-800 transition-colors cursor-pointer">Records</router-link> 
+          <span class="text-gray-300">/</span> 
+          <span class="text-red-800">View Details</span>
         </div>
         <div class="flex gap-2">
-           <button class="px-4 py-2 text-xs font-bold text-gray-600 bg-white border border-gray-200 rounded hover:bg-gray-50">Reject</button>
-           <button class="px-4 py-2 text-xs font-bold text-white bg-red-800 rounded hover:bg-red-900">Approve Record</button>
+           
         </div>
       </div>
 
@@ -20,13 +21,13 @@
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 space-y-6">
           <div class="relative bg-black rounded-xl overflow-hidden shadow-lg aspect-video">
-             <div class="absolute inset-0 bg-slate-800 flex items-center justify-center text-slate-600 font-mono">IMAGE DATA LOADED</div>
+             <img src="/images/nh3.jpg" class="absolute inset-0 w-full h-full object-cover" alt="Evidence">
              <div class="absolute bottom-4 right-4 flex gap-2">
-               <div class="bg-red-600 text-white px-3 py-1 rounded text-center">
+               <div class="bg-red-600 text-white px-3 py-1 rounded text-center shadow-lg">
                  <p class="text-[8px] uppercase font-bold opacity-70 leading-none">Confidence</p>
                  <p class="text-sm font-bold">98.4%</p>
                </div>
-               <div class="bg-red-900 text-white px-3 py-1 rounded text-center">
+               <div class="bg-red-900 text-white px-3 py-1 rounded text-center shadow-lg">
                  <p class="text-[8px] uppercase font-bold opacity-70 leading-none">Alert Type</p>
                  <p class="text-sm font-bold">No Helmet</p>
                </div>
@@ -42,7 +43,7 @@
                  <p class="text-[10px] text-gray-400">2023-11-24 14:32:01</p>
                  <div class="mt-2 p-2 bg-gray-50 rounded text-[10px] text-gray-500 italic">System CAM01-G04 identified a violation 'No Helmet' with high confidence.</div>
                </div>
-               </div>
+            </div>
           </div>
         </div>
 
