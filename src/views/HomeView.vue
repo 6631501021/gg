@@ -53,7 +53,7 @@
           <h3 class="text-4xl font-bold text-gray-900 mt-1">1</h3>
         </div>
 
-        
+
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -101,42 +101,30 @@
 
         <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
           <div class="flex justify-between items-center mb-4">
-            <h3 class="text-xl font-bold text-gray-900">Recent Alerts</h3>
-            <span class="bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded uppercase">Live</span>
+            <h3 class="text-xl font-bold text-gray-900">RECENT VIOLATIONS</h3>
+            <span
+              class="bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded uppercase animate-pulse">Live</span>
           </div>
 
           <div class="space-y-4">
-            <div
+            <div v-for="alert in displayedAlerts" :key="alert.id"
               class="flex gap-4 items-center p-3 hover:bg-gray-50 rounded-lg cursor-pointer border border-transparent hover:border-gray-100 transition-all">
-              <div class="w-20 h-14 bg-gray-200 rounded overflow-hidden flex-shrink-0">
-                <div class="w-full h-full bg-gray-300"></div>
+              <div class="w-20 h-14 bg-gray-200 rounded overflow-hidden flex-shrink-0 shadow-sm">
+                <img :src="alert.image" :alt="alert.plate" class="w-full h-full object-cover" />
               </div>
-              <div>
-                <h4 class="text-sm font-bold text-red-700">No Helmet Detected</h4>
-                <p class="text-xs text-gray-500">Post guard gate - IN</p>
-                <p class="text-[10px] font-mono text-gray-400 mt-1">PLATE: 1กก-8822</p>
-              </div>
-              <span class="text-xs text-gray-400 ml-auto">2m ago</span>
-            </div>
 
-            <div
-              class="flex gap-4 items-center p-3 hover:bg-gray-50 rounded-lg cursor-pointer border border-transparent hover:border-gray-100 transition-all">
-              <div class="w-20 h-14 bg-gray-200 rounded overflow-hidden flex-shrink-0">
-                <div class="w-full h-full bg-gray-300"></div>
+              <div class="flex-1">
+                <h4 class="text-sm font-bold text-red-700">{{ alert.title }}</h4>
+                <p class="text-xs text-gray-500">{{ alert.location }}</p>
+                <p class="text-[10px] font-mono text-gray-400 mt-1">PLATE: {{ alert.plate }}</p>
               </div>
-              <div>
-                ผ
-                <h4 class="text-sm font-bold text-red-700">No Helmet Detected</h4>
-                <p class="text-xs text-gray-500">Post guard gate - OUT</p>
-                <p class="text-[10px] font-mono text-gray-400 mt-1">PLATE: 3กข</p>
-              </div>
-              <span class="text-xs text-gray-400 ml-auto">8m ago</span>
+              <span class="text-xs text-gray-400 ml-auto whitespace-nowrap">{{ alert.time }}</span>
             </div>
           </div>
 
-          <button
+          <button @click="showAll = !showAll"
             class="w-full mt-4 py-2 text-sm font-bold text-red-800 border border-red-100 rounded-lg hover:bg-red-50 transition-colors">
-            VIEW ALL INCIDENTS
+            {{ showAll ? 'SHOW LESS' : 'VIEW ALL INCIDENTS' }}
           </button>
         </div>
       </div>
@@ -181,4 +169,27 @@ const data7d = [
 const currentChartData = computed(() => {
   return activeTab.value === '24h' ? data24h : data7d
 })
+
+// 1. สร้างตัวแปรเก็บสถานะการกดปุ่ม (ค่าเริ่มต้นคือ false = ยังไม่กด)
+const showAll = ref(false)
+
+// 2. ข้อมูลจำลอง 10 รายการ
+const recentAlerts = [
+  { id: 1, title: 'No Helmet Detected', location: 'Post guard gate - IN', plate: '1กก-8822', time: '2m ago', image: 'public/images/nh1.jpg' },
+  { id: 2, title: 'No Helmet Detected', location: 'Post guard gate - OUT', plate: '3กข-1234', time: '8m ago', image: 'public/images/nh2.jpg' },
+  { id: 3, title: 'No Helmet Detected', location: 'Dormitory Gate - IN', plate: 'ขข-999', time: '15m ago', image: 'public/images/nh3.jpg' },
+  { id: 4, title: 'Multiple Riders (No Helmet)', location: 'Main Gate - OUT', plate: '5งง-5555', time: '22m ago', image: 'public/images/nh4.jpg' },
+  { id: 5, title: 'No Helmet Detected', location: 'Dormitory Gate - OUT', plate: '1กค-1111', time: '30m ago', image: 'public/images/nh1.jpg' },
+  { id: 6, title: 'No Helmet Detected', location: 'Medical Center Gate', plate: '2กจ-4433', time: '45m ago', image: 'public/images/nh2.jpg' },
+  { id: 7, title: 'No Helmet Detected', location: 'Post guard gate - IN', plate: '8กฮ-9090', time: '1h ago', image: 'public/images/nh3.jpg' },
+  { id: 8, title: 'No Helmet Detected', location: 'Stadium Rear Access', plate: '1ขข-100', time: '1.5h ago', image: 'public/images/nh4.jpg' },
+  { id: 9, title: 'No Helmet Detected', location: 'Main Gate - IN', plate: 'ไม่ติดแผ่นป้าย', time: '2h ago', image: 'public/images/nh1.jpg' },
+  { id: 10, title: 'No Helmet Detected', location: 'Post guard gate - OUT', plate: '4กต-2345', time: '3h ago', image: 'public/images/nh2.jpg' }
+]
+
+// 3. คำนวณว่าจะโชว์กี่อัน ถ้า showAll เป็นจริงโชว์หมด ถ้าเป็นเท็จโชว์แค่ 3 อันแรก (.slice(0, 3))
+const displayedAlerts = computed(() => {
+  return showAll.value ? recentAlerts : recentAlerts.slice(0, 3)
+})
+
 </script>
