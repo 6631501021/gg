@@ -35,7 +35,12 @@
           <div class="relative aspect-[16/9] bg-gray-800 flex items-center justify-center overflow-hidden">
             <div class="absolute inset-0 bg-slate-700 opacity-50"></div>
             <p class="text-slate-500 font-mono text-sm z-0">CAMERA SIGNAL ACTIVE</p>
-            <img src="http://localhost:8000/video_feed"
+            <!-- On localhost -->
+            <!-- <img src="http://localhost:8000/video_feed"
+              class="absolute inset-0 w-full h-full object-contain opacity-100" alt="Live AI Feed"> -->
+
+            <!-- On web -->
+            <img src="https://corporal-shimmy-fanning.ngrok-free.dev/video_feed"
               class="absolute inset-0 w-full h-full object-contain opacity-100" alt="Live AI Feed">
 
             <div class="absolute top-4 left-4 z-10">
