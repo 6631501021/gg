@@ -40,7 +40,7 @@
               class="absolute inset-0 w-full h-full object-contain opacity-100" alt="Live AI Feed"> -->
 
             <!-- On web -->
-            <img src="https://corporal-shimmy-fanning.ngrok-free.dev/video_feed"
+            <img src="https://itchy-pugs-sort.loca.lt/video_feed"
               class="absolute inset-0 w-full h-full object-contain opacity-100" alt="Live AI Feed">
 
             <div class="absolute top-4 left-4 z-10">
@@ -72,6 +72,7 @@
               </button>
             </div>
 
+            <!-- Bounding Boxes -->
             <!-- <div class="absolute border-2 border-red-600 bg-red-600/10 z-20 transition-all duration-300"
               style="top: 20%; left: 45%; width: 18%; height: 25%;">
               <div
