@@ -40,7 +40,7 @@
               class="absolute inset-0 w-full h-full object-contain opacity-100" alt="Live AI Feed"> -->
 
             <!-- On web -->
-            <img src="https://full-crabs-call.loca.lt/video_feed"
+            <img src="https://honey-separately-stay-does.trycloudflare.com/video_feed"
               class="absolute inset-0 w-full h-full object-contain opacity-100" alt="Live AI Feed">
 
             <div class="absolute top-4 left-4 z-10">
