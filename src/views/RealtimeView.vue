@@ -4,7 +4,8 @@
 
       <div class="flex justify-between items-end border-b border-gray-200 pb-4">
         <div class="flex items-center gap-4">
-
+            <!-- ใส่ Header หรือ Title ตรงนี้ได้ -->
+            <h2 class="text-2xl font-bold text-gray-800">AI Modular Demo</h2>
         </div>
         <div class="relative w-64">
           <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor"
@@ -31,17 +32,20 @@
         </div>
 
         <div v-for="cam in filteredCameras" :key="cam.id"
-          class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-300">
-          <div class="relative aspect-[16/9] bg-gray-800 flex items-center justify-center overflow-hidden">
+          class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-300 relative">
+          
+          <!-- ชื่อระบบโมดูล (โชว์เด่นๆ ด้านบนจอ) -->
+          <div class="bg-gray-100 px-4 py-2 border-b border-gray-200 flex justify-between items-center">
+            <span class="font-bold text-gray-800">{{ cam.description }}</span>
+          </div>
+
+          <div class="relative aspect-[16/9] bg-gray-900 flex items-center justify-center overflow-hidden">
             <div class="absolute inset-0 bg-slate-700 opacity-50"></div>
             <p class="text-slate-500 font-mono text-sm z-0">CAMERA SIGNAL ACTIVE</p>
-            <!-- On localhost -->
-            <!-- <img src="http://localhost:8000/video_feed"
-              class="absolute inset-0 w-full h-full object-contain opacity-100" alt="Live AI Feed"> -->
-
-            <!-- On web -->
-            <img src="https://honey-separately-stay-does.trycloudflare.com/video_feed"
-              class="absolute inset-0 w-full h-full object-contain opacity-100" alt="Live AI Feed">
+            
+            <!-- 🔌 ดึงภาพจาก API ท่อใครท่อมัน (Dynamic URL) -->
+            <img :src="cam.streamUrl"
+              class="absolute inset-0 w-full h-full object-contain opacity-100" :alt="cam.name">
 
             <div class="absolute top-4 left-4 z-10">
               <div
@@ -49,7 +53,6 @@
                 <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
                 LIVE // {{ cam.name }}
               </div>
-              <div class="mt-1 text-[9px] text-white/70 font-mono drop-shadow-md">{{ cam.timestamp }}</div>
             </div>
 
             <div class="absolute top-4 right-4 z-20 flex items-center gap-2">
@@ -71,28 +74,13 @@
                 </svg>
               </button>
             </div>
-
-            <!-- Bounding Boxes -->
-            <!-- <div class="absolute border-2 border-red-600 bg-red-600/10 z-20 transition-all duration-300"
-              style="top: 20%; left: 45%; width: 18%; height: 25%;">
-              <div
-                class="absolute bottom-0 left-0 bg-red-600 text-white text-[8px] font-bold px-1 py-0.5 whitespace-nowrap">
-                NO HELMET: {{ cam.helmetScore }}</div>
-            </div>
-
-            <div class="absolute border-2 border-yellow-400 bg-yellow-400/10 z-20"
-              style="bottom: 2%; right: 18%; width: 12%; height: 10%;">
-              <div
-                class="absolute top-0 left-0 bg-yellow-400 text-black text-[8px] font-bold px-1 py-0.5 whitespace-nowrap">
-                PLATE: {{ cam.plate }}</div>
-            </div> -->
-
           </div>
         </div>
 
       </div>
     </div>
 
+    <!-- Modal เพิ่มกล้อง (ละไว้เหมือนเดิม) -->
     <button @click="showModal = true"
       class="fixed bottom-8 right-8 w-14 h-14 bg-red-900 hover:bg-red-800 text-white rounded-xl shadow-lg shadow-red-900/30 flex items-center justify-center transition-transform hover:scale-105 z-40">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -119,7 +107,7 @@
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">RTSP Stream URL (Optional)</label>
-            <input type="text" placeholder="rtsp://admin:pass@192.168.1.100/stream"
+            <input type="text" placeholder="http://localhost:8000/video_..."
               class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:ring-2 focus:ring-red-800 focus:border-red-800 outline-none">
           </div>
         </div>
@@ -146,27 +134,35 @@ const searchQuery = ref('')
 const showModal = ref(false)
 const newCamName = ref('')
 
+// 🚨 กำหนด Base URL ของ Backend (ถ้าใช้ Cloudflare tunnel ก็เปลี่ยนตรงนี้ที่เดียวจบ!)
+const BACKEND_URL = 'https://lanes-hung-occupations-fellow.trycloudflare.com' 
+// const BACKEND_URL = 'https://seeds-processors-spots-morgan.trycloudflare.com'
+
 const cameras = ref([
   {
     id: 1,
-    name: 'GATE_01_IN',
-    timestamp: '2023-11-24 14:32:05 UTC+7',
+    name: 'CAM_01_HELMET',
+    description: '🧠 Module 1: Helmet Detection System (ตรวจจับหมวกกันน็อก)',
     fps: '60.2',
     latency: '14ms',
-    helmetScore: '0.98',
-    plate: 'ABC-123',
-    image: '/images/nh3.jpg'
+    streamUrl: `${BACKEND_URL}/video_helmet` // วิ่งไปท่อที่ 1
   },
   {
     id: 2,
-    name: 'GATE_02_OUT',
-    timestamp: '2023-11-24 14:32:10 UTC+7',
+    name: 'CAM_02_MOTO',
+    description: '🏍️ Module 2: Motorcycle Tracking System (ติดตามรถมอเตอร์ไซค์)',
     fps: '59.8',
     latency: '16ms',
-    helmetScore: '0.95',
-    plate: 'XYZ-999',
-    image: '/images/nh3.jpg'
-  }
+    streamUrl: `${BACKEND_URL}/video_moto` // วิ่งไปท่อที่ 2
+  },
+  {
+    id: 3,
+    name: 'CAM_03_PLATE',
+    description: '🔠 Module 3: License Plate & OCR Scanner (อ่านป้ายทะเบียน)',
+    fps: '61.3',
+    latency: '16ms',
+    streamUrl: `${BACKEND_URL}/video_plate` // วิ่งไปท่อที่ 3
+  },
 ])
 
 const filteredCameras = computed(() => {
@@ -185,21 +181,16 @@ const addNewCamera = () => {
   cameras.value.push({
     id: Date.now(),
     name: finalName.toUpperCase(),
-    timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC+7',
+    description: '🔧 Custom Added Stream',
     fps: '60.0',
     latency: '15ms',
-    helmetScore: '0.00',
-    plate: 'SCANNING...',
-    image: '/images/nh2.jpg'
+    streamUrl: `${BACKEND_URL}/video_feed` // ตั้งค่า Default เวลาแอดกล้องใหม่
   })
   closeModal()
 }
 
-// 💡 ฟังก์ชันที่เพิ่มเข้ามาสำหรับลบกล้อง
 const removeCamera = (id) => {
-  // ใช้ confirm เพื่อเด้งแจ้งเตือนถามความแน่ใจก่อนลบ
   if (confirm('Are you sure you want to disconnect and remove this camera?')) {
-    // กรองเอากล้องที่ id ตรงกันออกไปจาก Array
     cameras.value = cameras.value.filter(cam => cam.id !== id)
   }
 }
