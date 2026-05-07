@@ -31,7 +31,7 @@
             <span class="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-1 rounded">STABLE</span>
           </div>
           <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Active Gates</p>
-          <h3 class="text-3xl font-bold text-gray-900 mt-1">01</h3>
+          <h3 class="text-3xl font-bold text-gray-900 mt-1">02</h3>
         </div>
 
         <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
@@ -50,26 +50,40 @@
           <div class="flex justify-between items-center mb-6">
             <h3 class="text-lg font-bold text-gray-900">Peak Violation Times</h3>
             <div class="flex bg-gray-100 p-1 rounded-lg">
-              <button class="px-3 py-1 text-xs font-bold bg-white text-gray-900 shadow-sm rounded">Daily</button>
-              <button class="px-3 py-1 text-xs font-bold text-gray-500 hover:text-gray-900 rounded">Hourly</button>
+              <button 
+                @click="activeTab = 'daily'"
+                :class="[
+                  'px-3 py-1 text-xs font-bold rounded transition-colors', 
+                  activeTab === 'daily' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-900'
+                ]"
+              >
+                Daily
+              </button>
+              <button 
+                @click="activeTab = 'hourly'"
+                :class="[
+                  'px-3 py-1 text-xs font-bold rounded transition-colors', 
+                  activeTab === 'hourly' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-900'
+                ]"
+              >
+                Hourly
+              </button>
             </div>
           </div>
+          
           <div class="flex-1 flex items-end gap-2 mt-4 min-h-[200px] border-b-2 border-gray-100 pb-2 relative">
-             <div class="w-full bg-red-200/50 rounded-t-sm" style="height: 30%"></div>
-             <div class="w-full bg-red-300 rounded-t-sm" style="height: 45%"></div>
-             <div class="w-full bg-red-400 rounded-t-sm" style="height: 60%"></div>
-             <div class="w-full bg-red-900 rounded-t-sm relative" style="height: 90%"><span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold text-red-900">Peak</span></div>
-             <div class="w-full bg-red-800 rounded-t-sm" style="height: 80%"></div>
-             <div class="w-full bg-red-400 rounded-t-sm" style="height: 50%"></div>
-             <div class="w-full bg-red-200 rounded-t-sm" style="height: 25%"></div>
-             <div class="w-full bg-red-200/50 rounded-t-sm" style="height: 20%"></div>
-             <div class="w-full bg-red-300 rounded-t-sm" style="height: 35%"></div>
-             <div class="w-full bg-red-800 rounded-t-sm" style="height: 75%"></div>
-             <div class="w-full bg-white rounded-t-sm" style="height: 10%"></div>
-             <div class="w-full bg-red-700 rounded-t-sm" style="height: 60%"></div>
+             <div 
+               v-for="(bar, index) in currentGraph.bars" 
+               :key="index"
+               :class="['w-full rounded-t-sm transition-all duration-500 ease-out', bar.color, bar.isPeak ? 'relative' : '']" 
+               :style="{ height: bar.height + '%' }"
+             >
+               <span v-if="bar.isPeak" class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold text-red-900">Peak</span>
+             </div>
           </div>
+          
           <div class="flex justify-between text-[10px] font-bold text-gray-400 mt-2 px-1">
-            <span>06:00</span><span>08:00</span><span>10:00</span><span>12:00</span><span>14:00</span><span>16:00</span><span>18:00</span><span>20:00</span><span>22:00</span>
+            <span v-for="(label, index) in currentGraph.labels" :key="index">{{ label }}</span>
           </div>
         </div>
 
@@ -77,7 +91,7 @@
           <h3 class="text-lg font-bold text-gray-900 mb-6">Violation Types</h3>
           <div class="flex-1 flex items-center justify-center relative">
             <div class="w-48 h-48 rounded-full border-[16px] border-red-900 relative flex items-center justify-center">
-              <div class="absolute inset-0 border-[16px] border-yellow-400 rounded-full" style="clip-path: polygon(50% 50%, 100% 0, 100% 30%, 50% 50%); transform: rotate(-45deg);"></div>
+              <div class="absolute inset-0 border-[16px] border-yellow-400 rounded-full transition-all duration-500" style="clip-path: polygon(50% 50%, 100% 0, 100% 30%, 50% 50%); transform: rotate(-45deg);"></div>
               <div class="text-center">
                 <h2 class="text-4xl font-black text-red-900 leading-none">72%</h2>
                 <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Unauthorized</p>
@@ -112,7 +126,7 @@
           </thead>
           <tbody class="divide-y divide-gray-100">
             <tr class="hover:bg-gray-50 transition-colors">
-              <td class="px-6 py-4 font-bold text-gray-900">Main Gate (Phahonyothin)</td>
+              <td class="px-6 py-4 font-bold text-gray-900">Main Gate (IN)</td>
               <td class="px-6 py-4 font-mono text-gray-600">5,821</td>
               <td class="px-6 py-4 font-mono text-gray-600">42</td>
               <td class="px-6 py-4">
@@ -121,7 +135,7 @@
               <td class="px-6 py-4"><span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-1 rounded uppercase">Optimal</span></td>
             </tr>
             <tr class="hover:bg-gray-50 transition-colors bg-orange-50/30">
-              <td class="px-6 py-4 font-bold text-gray-900">Dormitory Gate</td>
+              <td class="px-6 py-4 font-bold text-gray-900">Main Gate (OUT)</td>
               <td class="px-6 py-4 font-mono text-gray-600">2,110</td>
               <td class="px-6 py-4 font-mono text-gray-600">88</td>
               <td class="px-6 py-4">
@@ -129,24 +143,8 @@
               </td>
               <td class="px-6 py-4"><span class="bg-yellow-100 text-yellow-800 text-[10px] font-bold px-2 py-1 rounded uppercase">Moderate</span></td>
             </tr>
-            <tr class="hover:bg-gray-50 transition-colors">
-              <td class="px-6 py-4 font-bold text-gray-900">Medical Center Gate</td>
-              <td class="px-6 py-4 font-mono text-gray-600">4,302</td>
-              <td class="px-6 py-4 font-mono text-gray-600">15</td>
-              <td class="px-6 py-4">
-                <div class="w-32 h-2 bg-gray-200 rounded-full overflow-hidden"><div class="w-[95%] h-full bg-green-500"></div></div>
-              </td>
-              <td class="px-6 py-4"><span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-1 rounded uppercase">Optimal</span></td>
-            </tr>
-            <tr class="hover:bg-gray-50 transition-colors bg-red-50/50">
-              <td class="px-6 py-4 font-bold text-gray-900">Stadium Rear Access</td>
-              <td class="px-6 py-4 font-mono text-gray-600">942</td>
-              <td class="px-6 py-4 font-mono text-gray-600 text-red-600 font-bold">41</td>
-              <td class="px-6 py-4">
-                <div class="w-32 h-2 bg-gray-200 rounded-full overflow-hidden"><div class="w-[30%] h-full bg-red-600"></div></div>
-              </td>
-              <td class="px-6 py-4"><span class="bg-red-100 text-red-800 text-[10px] font-bold px-2 py-1 rounded uppercase">Critical</span></td>
-            </tr>
+            
+            
           </tbody>
         </table>
       </div>
@@ -156,5 +154,44 @@
 </template>
 
 <script setup>
+import { ref, computed } from 'vue'
 import MainLayout from '../components/MainLayout.vue'
+
+// เก็บสถานะว่ากดปุ่มไหนอยู่ (ค่า Default คือรายวัน)
+const activeTab = ref('daily')
+
+// 🌟 ข้อมูลกราฟจำลอง 2 ชุด
+const graphData = {
+  daily: {
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    bars: [
+      { height: 45, color: 'bg-red-300' },
+      { height: 60, color: 'bg-red-400' },
+      { height: 50, color: 'bg-red-400' },
+      { height: 95, color: 'bg-red-900', isPeak: true }, // วันพฤหัส Peak สุดๆ
+      { height: 75, color: 'bg-red-800' },
+      { height: 30, color: 'bg-red-200' },
+      { height: 20, color: 'bg-red-200/50' }
+    ]
+  },
+  hourly: {
+    labels: ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'],
+    bars: [
+      { height: 20, color: 'bg-red-200/50' },
+      { height: 35, color: 'bg-red-300' },
+      { height: 45, color: 'bg-red-400' },
+      { height: 80, color: 'bg-red-800' },
+      { height: 90, color: 'bg-red-900', isPeak: true }, // ตอนบ่าย 2 คนทำผิดเยอะสุด
+      { height: 60, color: 'bg-red-700' },
+      { height: 30, color: 'bg-red-300' },
+      { height: 15, color: 'bg-red-200/50' },
+      { height: 10, color: 'bg-white' }
+    ]
+  }
+}
+
+// 🌟 ใช้ Computed เพื่อให้ข้อมูลเปลี่ยนไปมาอัตโนมัติเวลากดปุ่ม
+const currentGraph = computed(() => {
+  return graphData[activeTab.value]
+})
 </script>
