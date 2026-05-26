@@ -135,7 +135,7 @@ const showModal = ref(false)
 const newCamName = ref('')
 
 // 🚨 กำหนด Base URL ของ Backend (ถ้าใช้ Cloudflare tunnel ก็เปลี่ยนตรงนี้ที่เดียวจบ!)
-const BACKEND_URL = 'https://transportation-shade-literally-speeches.trycloudflare.com' 
+const BACKEND_URL = 'https://obituaries-advised-dispatched-latino.trycloudflare.com' 
 // const BACKEND_URL = 'https://seeds-processors-spots-morgan.trycloudflare.com'
 
 const cameras = ref([
